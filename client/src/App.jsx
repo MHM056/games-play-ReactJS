@@ -26,6 +26,7 @@ function App() {
     const newGame = await gameService.create(data);
 
     setGames(state => [...state, newGame]);
+    
     navigate('/games');
   };
 
