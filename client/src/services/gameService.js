@@ -7,6 +7,8 @@ export const getAll = async () => {
    return Object.values(games);
 };
 
-export const create = (data) => {
+export const create = async (data) => {
+    const result = await request.post(baseURL, data);
 
+    return result;
 };
