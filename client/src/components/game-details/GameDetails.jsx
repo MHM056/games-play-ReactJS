@@ -1,17 +1,44 @@
 import { useParams } from 'react-router-dom';
 import * as gameService from '../../services/gameService';
-import { useEffect, useState} from 'react';
+import * as commentService from '../../services/commentService';
+import { useEffect, useState } from 'react';
 
 export const GameDetails = () => {
     const { gameId } = useParams();
     const [game, setGame] = useState({});
+    const [username, setUsername] = useState('');
+    const [comment, setComment] = useState('');
+    const [gameComments, setGameComments] = useState([]);
 
     useEffect(() => {
         gameService.getOne(gameId)
-        .then(result => {
-            setGame(result);
-        });
+            .then(setGame);
+
+        commentService.getAll(gameId)
+            .then(setGameComments);
     }, [gameId]);
+
+    const onUsernameChange = (e) => {
+        setUsername(e.target.value);
+    };
+
+    const onCommentChange = (e) => {
+        setComment(e.target.value);
+    };
+
+    const addCommentHandler = async (e) => {
+        e.preventDefault();
+
+       const newComment = await commentService.create(
+            gameId,
+            username,
+            comment
+        );
+
+        setUsername('');
+        setComment('');
+        setGameComments(state => [...state, newComment]);
+    };
 
     return (
         <section id="game-details">
@@ -31,16 +58,16 @@ export const GameDetails = () => {
                 <div className="details-comments">
                     <h2>Comments:</h2>
                     <ul>
-                        {/* <!-- list all comments for current game (If any) --> */}
-                        <li className="comment">
-                            <p>Content: I rate this one quite highly.</p>
-                        </li>
-                        <li className="comment">
-                            <p>Content: The best game.</p>
-                        </li>
+                        {gameComments.map(({ _id, username, text }) => (
+                            <li key={_id} className="comment">
+                                <p>{username}: {text}</p>
+                            </li>
+                        ))}
                     </ul>
                     {/* <!-- Display paragraph: If there are no games in the database --> */}
-                    <p className="no-comment">No comments.</p>
+                    {gameComments.length === 0 && (
+                        <p className="no-comment">No comments.</p>
+                    )}
                 </div>
 
                 {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
@@ -54,8 +81,9 @@ export const GameDetails = () => {
             {/* <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) --> */}
             <article className="create-comment">
                 <label>Add new comment:</label>
-                <form className="form">
-                    <textarea name="comment" placeholder="Comment......"></textarea>
+                <form className="form" onSubmit={addCommentHandler}>
+                    <input type="text" name="username" placeholder='Username' value={username} onChange={onUsernameChange} />
+                    <textarea name="comment" placeholder="Comment......" value={comment} onChange={onCommentChange}></textarea>
                     <input className="btn submit" type="submit" value="Add Comment" />
                 </form>
             </article>
