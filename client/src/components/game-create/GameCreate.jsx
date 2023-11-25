@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import * as gameService from "../../services/gameService";
 
-export const GameCreate = ({
-    onCreateGameSubmit
-}) => {
+export const GameCreate = () => {
+    const navigate = useNavigate();
+
     const [values, setValues] = useState({
         title: '',
         category: '',
@@ -19,7 +21,13 @@ export const GameCreate = ({
         e.preventDefault();
         onCreateGameSubmit(values);
     };
-    
+
+    const onCreateGameSubmit = async (data) => {
+        await gameService.create(data);
+
+        navigate('/games');
+    };
+
     return (
         <section id="create-page" className="auth">
             <form id="create" onSubmit={onSubmit}>
