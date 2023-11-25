@@ -13,8 +13,16 @@ const request = async (method, url, data) => {
     }
     const response = await fetch(url, options);
 
+    if(response.status === 204) {
+        return {};
+    }
+
     try {
         const result = await response.json();
+        
+        if(!response.ok) {
+            throw result;
+        }
         
         return result;
 

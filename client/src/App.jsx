@@ -11,6 +11,7 @@ import { GameCreate } from './components/game-create/GameCreate';
 import { Login } from './components/login/Login';
 import { Register } from './components/register/Register';
 import { GameDetails } from './components/game-details/GameDetails';
+import { Logout } from './components/logout/Logout';
 
 
 function App() {
@@ -33,9 +34,15 @@ function App() {
     navigate('/');
   };
 
+  const logoutHandler = () => {
+    setAuth({});
+    navigate('/');
+  };
+
   const values = {
     loginSubmitHandler,
     registerSubmitHandler,
+    logoutHandler,
     username: auth.username || auth.email,
     email: auth.email,
     isAuthenticated: !!auth.accessToken
@@ -53,6 +60,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/games/:gameId' element={<GameDetails />} />
+          <Route path='/logout' element={<Logout />} />
         </Routes>
       </div>
     </AuthContext.Provider>
