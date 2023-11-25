@@ -1,6 +1,8 @@
 import { useState, useEffect, } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+
 import * as gameService from './services/gameService';
+
 import { Header } from "./components/header/Header";
 import { Home } from "./components/home/Home";
 import { GameList } from './components/game-list/GameList';
@@ -12,8 +14,14 @@ import { GameDetails } from './components/game-details/GameDetails';
 
 function App() {
 
-  const [games, setGames] = useState([]);
+
   const navigate = useNavigate();
+  const [games, setGames] = useState([]);
+  const [auth, setAuth] = useState({});
+
+  const loginSubmitHandler = (values) => {
+    console.log(values);
+  };
 
   useEffect(() => {
     gameService.getAll()
@@ -27,7 +35,7 @@ function App() {
     const newGame = await gameService.create(data);
 
     setGames(state => [...state, newGame]);
-    
+
     navigate('/games');
   };
 
@@ -39,7 +47,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/games' element={<GameList games={games} />} />
         <Route path='/games/create' element={<GameCreate onCreateGameSubmit={onCreateGameSubmit} />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login loginSubmitHandler={loginSubmitHandler} />} />
         <Route path='/register' element={<Register />} />
         <Route path='/games/:gameId' element={<GameDetails />} />
       </Routes>
