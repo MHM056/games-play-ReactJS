@@ -1,6 +1,7 @@
-import { useState, useEffect, } from 'react';
+import { useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
+import AuthContext from './contexts/authContext';
 import * as gameService from './services/gameService';
 
 import { Header } from "./components/header/Header";
@@ -13,23 +14,14 @@ import { GameDetails } from './components/game-details/GameDetails';
 
 
 function App() {
-
+  const [auth, setAuth] = useState({});
 
   const navigate = useNavigate();
-  const [games, setGames] = useState([]);
-  const [auth, setAuth] = useState({});
+
 
   const loginSubmitHandler = (values) => {
     console.log(values);
   };
-
-  useEffect(() => {
-    gameService.getAll()
-      .then(result => {
-        setGames(result);
-      });
-
-  }, []);
 
   const onCreateGameSubmit = async (data) => {
     const newGame = await gameService.create(data);
@@ -40,18 +32,20 @@ function App() {
   };
 
   return (
-    <div id="box">
-      <Header />
+    <AuthContext.Provider value={loginSubmitHandler}>
+      <div id="box">
+        <Header />
 
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/games' element={<GameList games={games} />} />
-        <Route path='/games/create' element={<GameCreate onCreateGameSubmit={onCreateGameSubmit} />} />
-        <Route path='/login' element={<Login loginSubmitHandler={loginSubmitHandler} />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/games/:gameId' element={<GameDetails />} />
-      </Routes>
-    </div>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/games' element={<GameList />} />
+          <Route path='/games/create' element={<GameCreate onCreateGameSubmit={onCreateGameSubmit} />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/games/:gameId' element={<GameDetails />} />
+        </Routes>
+      </div>
+    </AuthContext.Provider>
   )
 }
 
