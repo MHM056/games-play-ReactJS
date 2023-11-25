@@ -23,6 +23,8 @@ function App() {
 
     setAuth(result);
 
+    localStorage.setItem('accessToken', result.accessToken);
+
     navigate('/')
   };
 
@@ -31,11 +33,16 @@ function App() {
 
     setAuth(result);
 
+    localStorage.setItem('accessToken', result.accessToken);
+
     navigate('/');
   };
 
   const logoutHandler = () => {
     setAuth({});
+
+    localStorage.removeItem('accessToken');
+
     navigate('/');
   };
 
