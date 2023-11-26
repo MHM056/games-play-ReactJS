@@ -1,12 +1,14 @@
 import { useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from "../../contexts/authContext";
+
 import * as gameService from '../../services/gameService';
 import * as commentService from '../../services/commentService';
-import { useEffect, useState } from 'react';
 
 export const GameDetails = () => {
+    const { email } = useContext(AuthContext);
     const { gameId } = useParams();
     const [game, setGame] = useState({});
-    const [username, setUsername] = useState('');
     const [comment, setComment] = useState('');
     const [gameComments, setGameComments] = useState([]);
 
@@ -18,10 +20,6 @@ export const GameDetails = () => {
             .then(setGameComments);
     }, [gameId]);
 
-    const onUsernameChange = (e) => {
-        setUsername(e.target.value);
-    };
-
     const onCommentChange = (e) => {
         setComment(e.target.value);
     };
@@ -29,15 +27,13 @@ export const GameDetails = () => {
     const addCommentHandler = async (e) => {
         e.preventDefault();
 
-       const newComment = await commentService.create(
+        const newComment = await commentService.create(
             gameId,
-            username,
             comment
         );
 
-        setUsername('');
         setComment('');
-        setGameComments(state => [...state, newComment]);
+        setGameComments(state => [...state, { ...newComment, author: { email } }]);
     };
 
     return (
@@ -58,9 +54,9 @@ export const GameDetails = () => {
                 <div className="details-comments">
                     <h2>Comments:</h2>
                     <ul>
-                        {gameComments.map(({ _id, username, text }) => (
+                        {gameComments.map(({ _id, text, owner: { email } }) => (
                             <li key={_id} className="comment">
-                                <p>{username}: {text}</p>
+                                <p>{email}: {text}</p>
                             </li>
                         ))}
                     </ul>
@@ -82,7 +78,6 @@ export const GameDetails = () => {
             <article className="create-comment">
                 <label>Add new comment:</label>
                 <form className="form" onSubmit={addCommentHandler}>
-                    <input type="text" name="username" placeholder='Username' value={username} onChange={onUsernameChange} />
                     <textarea name="comment" placeholder="Comment......" value={comment} onChange={onCommentChange}></textarea>
                     <input className="btn submit" type="submit" value="Add Comment" />
                 </form>
