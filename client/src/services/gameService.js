@@ -1,10 +1,10 @@
 import * as request from './requester';
 
-const baseURL = 'http://localhost:3030/jsonstore/games';
+const baseURL = 'http://localhost:3030/data/games';
 
 export const getAll = async () => {
    const games = await request.get(baseURL);
-   return Object.values(games);
+   return games;
 };
 
 export const getOne = async (gameId) => {
