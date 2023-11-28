@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from "../../contexts/authContext";
 
@@ -69,8 +69,8 @@ export const GameDetails = () => {
 
                 {userId === game._ownerId && (
                 <div className="buttons">
-                    <a href="#" className="button">Edit</a>
-                    <a href="#" className="button">Delete</a>
+                    <Link to={`/games/${gameId}/edit`} className="button">Edit</Link>
+                    <Link to={`/games/${gameId}/delete`} className="button">Delete</Link>
                 </div>
                 )}
             </div>
