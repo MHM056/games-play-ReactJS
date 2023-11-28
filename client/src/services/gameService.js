@@ -19,3 +19,5 @@ export const create = async (data) => {
 };
 
 export const edit = (gameId, game) => request.put(`${baseURL}/${gameId}`, game);
+
+export const remove = (gameId) => request.del(`${baseURL}/${gameId}`);
