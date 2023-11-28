@@ -17,3 +17,5 @@ export const create = async (data) => {
 
     return result;
 };
+
+export const edit = (gameId, game) => request.put(`${baseURL}/${gameId}`, game);
