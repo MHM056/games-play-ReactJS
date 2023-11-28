@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import * as authService from "./services/authService";
+import * as authService from "../services/authService";
 import { usePersistedState } from "../hooks/usePersistedState";
 
 
@@ -47,6 +47,7 @@ export const AuthProvider = ({
         loginSubmitHandler,
         registerSubmitHandler,
         logoutHandler,
+        userId: auth._id,
         username: auth.username || auth.email,
         email: auth.email,
         isAuthenticated: !!auth.accessToken

@@ -6,11 +6,12 @@ import * as gameService from '../../services/gameService';
 import * as commentService from '../../services/commentService';
 
 export const GameDetails = () => {
-    const { email } = useContext(AuthContext);
+    const { email, userId, isAuthenticated } = useContext(AuthContext);
     const { gameId } = useParams();
     const [game, setGame] = useState({});
     const [comment, setComment] = useState('');
     const [gameComments, setGameComments] = useState([]);
+    const canUserSeeComments = isAuthenticated && userId != game._ownerId;
 
     useEffect(() => {
         gameService.getOne(gameId)
@@ -60,21 +61,21 @@ export const GameDetails = () => {
                             </li>
                         ))}
                     </ul>
-                    {/* <!-- Display paragraph: If there are no games in the database --> */}
+
                     {gameComments.length === 0 && (
                         <p className="no-comment">No comments.</p>
                     )}
                 </div>
 
-                {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
+                {userId === game._ownerId && (
                 <div className="buttons">
                     <a href="#" className="button">Edit</a>
                     <a href="#" className="button">Delete</a>
                 </div>
+                )}
             </div>
 
-            {/* <!-- Bonus --> */}
-            {/* <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) --> */}
+            {canUserSeeComments && (
             <article className="create-comment">
                 <label>Add new comment:</label>
                 <form className="form" onSubmit={addCommentHandler}>
@@ -82,6 +83,7 @@ export const GameDetails = () => {
                     <input className="btn submit" type="submit" value="Add Comment" />
                 </form>
             </article>
+            )}
 
         </section>
     );
