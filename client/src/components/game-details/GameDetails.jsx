@@ -11,7 +11,7 @@ export const GameDetails = () => {
     const [game, setGame] = useState({});
     const [comment, setComment] = useState('');
     const [gameComments, setGameComments] = useState([]);
-    const canUserSeeComments = isAuthenticated && userId != game._ownerId;
+    const isUserLoggedAndNotAuthor = isAuthenticated && userId != game._ownerId;
 
     useEffect(() => {
         gameService.getOne(gameId)
@@ -75,7 +75,7 @@ export const GameDetails = () => {
                 )}
             </div>
 
-            {canUserSeeComments && (
+            {isUserLoggedAndNotAuthor && (
             <article className="create-comment">
                 <label>Add new comment:</label>
                 <form className="form" onSubmit={addCommentHandler}>
