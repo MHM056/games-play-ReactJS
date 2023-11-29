@@ -1,4 +1,25 @@
+import { useEffect, useState } from "react";
+import * as gameService from "../../services/gameService";
+import { LatestGame } from "./latest-game/LatestGame";
+
 export const Home = () => {
+    const [latestGames, setLatestGames] = useState([]);
+    useEffect(() => {
+        gameService.getAll()
+        .then(result => {
+            let lastThreeGames;
+            switch (result.length) {
+                case 1: 
+                case 2: 
+                case 3: lastThreeGames = result.slice(); break;
+                default: lastThreeGames = result.slice(result.length - 3); break;
+            }
+            
+            console.log(lastThreeGames);
+            setLatestGames(lastThreeGames);
+        })
+    }, []);
+
     return (
         <section id="welcome-world">
 
@@ -12,45 +33,12 @@ export const Home = () => {
                 <h1>Latest Games</h1>
 
                 {/* <!-- Display div: with information about every game (if any) --> */}
-                <div className="game">
-                    <div className="image-wrap">
-                        <img src="./images/CoverFire.png" />
-                    </div>
-                    <h3>Cover Fire</h3>
-                    <div className="rating">
-                        <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-                    </div>
-                    <div className="data-buttons">
-                        <a href="#" className="btn details-btn">Details</a>
-                    </div>
-                </div>
-                <div className="game">
-                    <div className="image-wrap">
-                        <img src="./images/ZombieLang.png" />
-                    </div>
-                    <h3>Zombie Lang</h3>
-                    <div className="rating">
-                        <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-                    </div>
-                    <div className="data-buttons">
-                        <a href="#" className="btn details-btn">Details</a>
-                    </div>
-                </div>
-                <div className="game">
-                    <div className="image-wrap">
-                        <img src="./images/MineCraft.png" />
-                    </div>
-                    <h3>MineCraft</h3>
-                    <div className="rating">
-                        <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-                    </div>
-                    <div className="data-buttons">
-                        <a href="#" className="btn details-btn">Details</a>
-                    </div>
-                </div>
-
+                {latestGames.map(game => <LatestGame key={game._id} {...game}/>)}
+                
                 {/* <!-- Display paragraph: If there is no games  --> */}
-                <p className="no-articles">No games yet</p>
+                {latestGames.length === 0 && (
+                    <p className="no-articles">No games yet</p>
+                )}
             </div>
         </section>
     );
