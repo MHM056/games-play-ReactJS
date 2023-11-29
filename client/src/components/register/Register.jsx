@@ -4,7 +4,7 @@ import AuthContext from "../../contexts/authContext";
 import { useForm } from "../../hooks/useForm";
 
 export const Register = () => {
-    const { registerSubmitHandler } = useContext(AuthContext);
+    const { registerSubmitHandler, errors } = useContext(AuthContext);
     const { values, onChange, onSubmit } = useForm(registerSubmitHandler, {
         email: '',
         password: '',
@@ -48,6 +48,11 @@ export const Register = () => {
 
                     <input className="btn submit" type="submit" value="Register" />
 
+                    {errors && (
+                        <div className="error">
+                            <p>{errors}</p>
+                        </div>
+                    )}
                     <p className="field">
                         <span>If you already have profile click <Link to="/login">here</Link></span>
                     </p>

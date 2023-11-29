@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import * as authService from "../services/authService";
@@ -14,6 +14,7 @@ export const AuthProvider = ({
 }) => {
     const navigate = useNavigate();
     const [auth, setAuth] = usePersistedState('auth', {});
+    const [errors, setError] = useState('');
 
     const loginSubmitHandler = async (values) => {
         const result = await authService.login(values.email, values.password);
@@ -26,13 +27,21 @@ export const AuthProvider = ({
     };
 
     const registerSubmitHandler = async (values) => {
-        const result = await authService.register(values.email, values.password);
-
-        setAuth(result);
-
-        localStorage.setItem('accessToken', result.accessToken);
-
-        navigate('/');
+        
+        try {
+            if(values.password !== values.confirmPassword){
+                throw new Error('Password missmatch!');
+            }
+                const result = await authService.register(values.email, values.password);
+        
+                setAuth(result);
+        
+                localStorage.setItem('accessToken', result.accessToken);
+        
+                navigate('/');
+        } catch (error) {
+            setError(error.message);
+        }
     };
 
     const logoutHandler = () => {
@@ -50,7 +59,8 @@ export const AuthProvider = ({
         userId: auth._id,
         username: auth.username || auth.email,
         email: auth.email,
-        isAuthenticated: !!auth.accessToken
+        isAuthenticated: !!auth.accessToken,
+        errors
     };
 
     return (
