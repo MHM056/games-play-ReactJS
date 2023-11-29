@@ -30,8 +30,9 @@ export const Home = () => {
 
             <div id="home-page">
                 <h1>Latest Games</h1>
-
-                {latestGames.map(game => <LatestGame key={game._id} {...game}/>)}
+                {latestGames.length > 0 && (
+                    latestGames.map(game => <LatestGame key={game._id} {...game}/>)
+                )}
                 
                 {latestGames.length === 0 && (
                     <p className="no-articles">No games yet</p>
