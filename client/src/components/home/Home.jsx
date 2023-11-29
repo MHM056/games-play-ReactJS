@@ -15,7 +15,6 @@ export const Home = () => {
                 default: lastThreeGames = result.slice(result.length - 3); break;
             }
             
-            console.log(lastThreeGames);
             setLatestGames(lastThreeGames);
         })
     }, []);
@@ -32,10 +31,8 @@ export const Home = () => {
             <div id="home-page">
                 <h1>Latest Games</h1>
 
-                {/* <!-- Display div: with information about every game (if any) --> */}
                 {latestGames.map(game => <LatestGame key={game._id} {...game}/>)}
                 
-                {/* <!-- Display paragraph: If there is no games  --> */}
                 {latestGames.length === 0 && (
                     <p className="no-articles">No games yet</p>
                 )}
