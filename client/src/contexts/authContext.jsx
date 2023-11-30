@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import * as authService from "../services/authService";
 import { usePersistedState } from "../hooks/usePersistedState";
+import { validateRegister } from "../utils/validateRegister";
 
 
 const AuthContext = createContext();
@@ -27,10 +28,11 @@ export const AuthProvider = ({
     };
 
     const registerSubmitHandler = async (values) => {
+        const validationResult = validateRegister(values.email, values.password, values.confirmPassword);
         
-        try {
-            if(values.password !== values.confirmPassword){
-                throw new Error('Password missmatch!');
+        try { 
+            if(validationResult.isValid === false) {
+                throw new Error(validationResult.message);
             }
                 const result = await authService.register(values.email, values.password);
         
