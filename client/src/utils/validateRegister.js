@@ -9,6 +9,11 @@ export const validateRegister = (email, password, confirmPassword) => {
         message = 'Invalid email';    
     }
 
+    if (password.length < 4) {
+        isValid = false;
+        message = 'Password must be atleast 4 characters long';
+    }
+
     if (password !== confirmPassword) {
         isValid = false;
         message = 'Password missmatch';
