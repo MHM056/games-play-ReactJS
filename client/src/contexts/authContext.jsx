@@ -15,7 +15,7 @@ export const AuthProvider = ({
 }) => {
     const navigate = useNavigate();
     const [auth, setAuth] = usePersistedState('auth', {});
-    const [errors, setError] = useState('');
+    const [errors, setErrors] = useState('');
 
     const loginSubmitHandler = async (values) => {
         const result = await authService.login(values.email, values.password);
@@ -42,7 +42,7 @@ export const AuthProvider = ({
         
                 navigate('/');
         } catch (error) {
-            setError(error.message);
+            setErrors(error.message);
         }
     };
 
