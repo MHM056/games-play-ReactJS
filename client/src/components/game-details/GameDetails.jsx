@@ -35,7 +35,7 @@ export const GameDetails = () => {
         );
 
         setComment('');
-        setGameComments(state => [...state, { ...newComment, author: { email } }]);
+        setGameComments(state => [...state, { ...newComment, owner: { email } }]);
     };
 
     const onDelete = async () => {

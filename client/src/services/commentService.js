@@ -12,7 +12,7 @@ export const getAll = async (gameId) => {
     return result;
 };
 
-export const create = async (gameId, username, text) => {
+export const create = async (gameId, text) => {
     const newComment = await request.post(baseURL, {
         gameId,
         text
