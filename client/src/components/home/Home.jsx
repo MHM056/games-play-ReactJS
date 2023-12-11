@@ -5,18 +5,8 @@ import { LatestGame } from "./latest-game/LatestGame";
 export const Home = () => {
     const [latestGames, setLatestGames] = useState([]);
     useEffect(() => {
-        gameService.getAll()
-        .then(result => {
-            let lastThreeGames;
-            switch (result.length) {
-                case 1: 
-                case 2: 
-                case 3: lastThreeGames = result.slice(); break;
-                default: lastThreeGames = result.slice(result.length - 3); break;
-            }
-            
-            setLatestGames(lastThreeGames);
-        })
+        gameService.getLatest()
+        .then(setLatestGames);
     }, []);
 
     return (

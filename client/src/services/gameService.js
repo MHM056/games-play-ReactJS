@@ -8,13 +8,13 @@ export const getAll = async () => {
 };
 
 export const getLatest = async () => {
-    const query = URLSearchParams({
+    const query = new URLSearchParams({
         offset: 0,
         pageSize: 3
     });
 
     const latestGames = await request.get(`${baseURL}?sortBy=_createdOn%20desc${query}`);
-    
+
     return latestGames;
 }
 
