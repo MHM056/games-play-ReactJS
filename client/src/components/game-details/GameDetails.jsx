@@ -78,7 +78,7 @@ export const GameDetails = () => {
 
                 {userId === game._ownerId && (
                 <div className="buttons">
-                    <Link to={`/games/${gameId}/edit`} onClick={onDelete} className="button">Edit</Link>
+                    <Link to={`/games/${gameId}/edit`} className="button">Edit</Link>
                     <a onClick={onDelete} className="button">Delete</a>
                 </div>
                 )}
